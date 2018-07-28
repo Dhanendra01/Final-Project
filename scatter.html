@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway|Oxigen|Open+Sans" rel="stylesheet">
+  </head>
+  <body>
+<script>
+
+// ***************************************************
+      // ********** Economy RATE VS HAPPINESS ************
+      // ***************************************************
+
+      // ******** Variable definition ********* 
+
+      // Div for tooltips
+      var div_2 = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+      // SVG to be modified selection
+      var vis_2 = d3.select("#EconomyRateVsHapiness");
+
+      // Dimensions
+      var MARGINS_2 = { top: 20, right: 210, bottom: 130, left: 50 },
+        MARGINS2_2 = { top: 410, right: 210, bottom: 50, left: 50 },
+        WIDTH_2 = +vis_2.attr("width") - MARGINS_2.left - MARGINS_2.right,
+        HEIGHT_2 = +vis_2.attr("height") - MARGINS_2.top - MARGINS_2.bottom,
+        HEIGHT2_2 = +vis_2.attr("height") - MARGINS2_2.top - MARGINS2_2.bottom;
+
+      // Scales
+      var xScale_2 = d3.scaleLinear().range([0, WIDTH_2]),
+        xScale2_2 = d3.scaleLinear().range([0, WIDTH_2]),
+        yScale_2 = d3.scaleLinear().range([HEIGHT_2, 0]),
+        yScale2_2 = d3.scaleLinear().range([HEIGHT2_2, 0]);
+
+      // Grid Lines X-axis function
+      function make_x_gridlines_2() {   
+          return d3.axisBottom(xScale_2)
+              .ticks(10)
+      }
+
+      // Grid Lines Y-axis function
+      function make_y_gridlines_2() {   
+          return d3.axisLeft(yScale_2)
+              .ticks(10)
+      }
+
+      // Axis
+      var xAxis_2 = d3.axisBottom(xScale_2),
+        xAxis2_2 = d3.axisBottom(xScale2_2),
+        yAxis_2 = d3.axisLeft(yScale_2);
+
+      // Define brush call
+      var brush_2 = d3.brushX()
+          .extent([[0, 0], [WIDTH_2, HEIGHT2_2]])
+          .on("brush end", brushed_2);
+
+      // Append class context that will be used to draw the charts in the context bar
+      var context_2 = vis_2.append("g")
+          .attr("class", "context_2")
+          .attr("transform", "translate(" + MARGINS2_2.left + "," + MARGINS2_2.top + ")");
+
+      // Append class points that will be used to draw the points in the graph
+      var points_2 = vis_2.append("g")
+          .attr("class", "points_2")
+          .attr("transform", "translate(" + MARGINS_2.left + "," + MARGINS_2.top + ")");
+
+      // clipPath definition
+      vis_2.append("defs").append("clipPath")
+        .attr("id", "clip_2")
+        .append("rect")
+        .attr("width", WIDTH_2)
+        .attr("height", HEIGHT_2);
+
+      // ******** Scatter plot graph creation *********
+
+      // Source of information
+      d3.csv("C:/Users/dhane/Desktop/CS498/Final Project/Data_2016.csv", function(data) {  
+        
+        // Economy rate and happiness score to number
+        data.forEach(function(d) {
+          d.Economy = +d.Economy;
+          d.Happiness_Score = +d.Happiness_Score;
+        });
+
+        // Nest data based on Region
+        var dataRegion_2 = d3.nest()
+            .key(function(d) { return d.Region; })
+            .entries(data);
+
+        // Set domain for ranges dynamically based on data
+        xScale_2.domain([d3.min(data, function(d) { return d.Happiness_Score; }) - 0.1, d3.max(data, function(d) { return d.Happiness_Score; }) + 0.1])
+        yScale_2.domain([0, d3.max(data, function(d) { return d.Economy; }) + 1]);
+        xScale2_2.domain(xScale_2.domain());
+        yScale2_2.domain(yScale_2.domain());
+
+        // Add the grid lines to X-Axis
+        points_2.append("g")      
+          .attr("class", "grid")
+          .attr("transform", "translate(0," + HEIGHT_2 + ")")
+          .call(make_x_gridlines_2()
+            .tickSize(-HEIGHT_2)
+            .tickFormat("")
+          )
+
+        // Add the grid lines to Y-Axis
+        points_2.append("g")      
+        .attr("class", "grid")
+        .call(make_y_gridlines_2()
+          .tickSize(-WIDTH_2)
+          .tickFormat("")
+        ) 
+
+        // Add the dots with tooltips
+        points_2.selectAll("dot")
+          .data(data)
+          .enter().append("circle")
+          .attr("r", 4)
+          .attr("cx", function(v) { return xScale_2(v.Happiness_Score); })
+          .attr("cy", function(v) { return yScale_2(v.Economy); })
+          .attr("class", "line_2")
+          .attr('id', function(v) { return 'point_2_'+v.Region.replace(/\s+/g, ''); } )
+          .attr('clip-path', 'url(#clip_2)')
+          .on("mouseover", function(v) {
+            div_2.transition()
+              .duration(200)
+              .style("opacity", .9);
+            div_2.html("<b style='font-size:12px; color:#333333'>" + v.Country_Name + "</b><br/><b>Year: 2015</b><br/><b>Economy: </b>" + v.Economy + "<br/><b>Happiness Score: </b>" + v.Happiness_Score)
+              .style("left", (d3.event.pageX) + "px")
+              .style("top", (d3.event.pageY - 28) + "px");
+          })
+          .on("mouseout", function(v) {
+            div_2.transition()
+            .duration(500)
+            .style("opacity", 0);
+          });
+
+        // Draw the scatter graph on context section
+        context_2.selectAll("dot")
+          .data(data)
+          .enter().append("circle")
+          .attr("r", 2.5)
+          .attr("cx", function(v) { return xScale2_2(v.Happiness_Score); })
+          .attr("cy", function(v) { return yScale2_2(v.Economy); })
+          .attr("class", "line_2")
+          .attr('id', function(v) { return 'point_2_'+v.Region.replace(/\s+/g, '') } )
+          .attr('clip-path', 'url(#clip_2)');
+
+        // For each Region add a legend and color
+        dataRegion_2.forEach(function(d, i) {
+
+          // Create legend text for each region
+          vis_2.append("text")
+            .attr("class", "legend")
+            .attr("x", WIDTH_2 + MARGINS_2.left + 30)
+            .attr("y", HEIGHT_2/2 + i * 20)
+            .style("fill", "black")
+            .text(d.key)
+            .attr('id', 'legendText_2_'+d.values[0].Region.replace(/\s+/g, ''))
+            .on("mouseover", function(v) {
+              var shadow = "2px 2px 2px #808080";
+              d3.selectAll("#legendColor_2_"+d.values[0].Region.replace(/\s+/g, '')).style("stroke-width", 1).style("stroke", "black");
+              d3.selectAll("#legendText_2_"+d.values[0].Region.replace(/\s+/g, '')).style("text-shadow", shadow);
+            })
+            .on("mouseout", function(v) {
+              var shadow = "2px 2px 2px #aaa";
+              d3.selectAll("#legendColor_2_"+d.values[0].Region.replace(/\s+/g, '')).style("stroke-width", 0).style("stroke", "none");
+              d3.selectAll("#legendText_2_"+d.values[0].Region.replace(/\s+/g, '')).style("text-shadow", shadow);
+            })
+            .on('click', function() {
+              var active = d.active ? false : true;
+              var opacity = active ? 0 : 1;
+              var legendOpacity = active ? 0.3 : 1;
+              var shadow = active ? "none" : "2px 2px 2px #aaa";
+              var radius = active ? 0 : 4;
+              d3.selectAll("#line_2_"+d.values[0].Region.replace(/\s+/g, '')).style("opacity", opacity);
+              d3.selectAll("#point_2_"+d.values[0].Region.replace(/\s+/g, '')).attr("r", radius);
+              d3.selectAll("#legendColor_2_"+d.values[0].Region.replace(/\s+/g, '')).style("opacity", legendOpacity);
+              d3.selectAll("#legendText_2_"+d.values[0].Region.replace(/\s+/g, '')).style("opacity", legendOpacity).style("text-shadow", shadow);
+              d.active = active;
+            });
+
+          // Create colored rectangle for each region       
+          vis_2.append("rect")
+            .attr("x", WIDTH_2 + MARGINS_2.left + 15)
+            .attr("y", HEIGHT_2/2 + i * 20 - 10)
+            .attr('fill', color(i))
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr('id', 'legendColor_2_'+d.values[0].Region.replace(/\s+/g, ''))
+            .on("mouseover", function(v) {
+              var shadow = "2px 2px 2px #808080";
+              d3.selectAll("#legendColor_2_"+d.values[0].Region.replace(/\s+/g, '')).style("stroke-width", 1).style("stroke", "black");
+              d3.selectAll("#legendText_2_"+d.values[0].Region.replace(/\s+/g, '')).style("text-shadow", shadow);
+            })
+            .on("mouseout", function(v) {
+              var shadow = "2px 2px 2px #aaa";
+              d3.selectAll("#legendColor_2_"+d.values[0].Region.replace(/\s+/g, '')).style("stroke-width", 0).style("stroke", "none");
+              d3.selectAll("#legendText_2_"+d.values[0].Region.replace(/\s+/g, '')).style("text-shadow", shadow);
+            })
+            .on('click', function() {
+              var active = d.active ? false : true;
+              var opacity = active ? 0 : 1;
+              var legendOpacity = active ? 0.3 : 1;
+              var radius = active ? 0 : 4;
+              d3.selectAll("#line_2_"+d.values[0].Region.replace(/\s+/g, '')).style("opacity", opacity);
+              d3.selectAll("#point_2_"+d.values[0].Region.replace(/\s+/g, '')).attr("r", radius);
+              d3.selectAll("#legendColor_2_"+d.values[0].Region.replace(/\s+/g, '')).style("opacity", legendOpacity);
+              d3.selectAll("#legendText_2_"+d.values[0].Region.replace(/\s+/g, '')).style("opacity", legendOpacity);
+              d.active = active;
+            });
+
+          // Set dots color by region
+          context_2.selectAll("#point_2_"+d.values[0].Region.replace(/\s+/g, '')).attr('fill', color(i));
+          points_2.selectAll("#point_2_"+d.values[0].Region.replace(/\s+/g, '')).attr('fill', color(i));
+        });
+
+        // Set X axis to scatter plot section
+        points_2.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + HEIGHT_2 + ")")
+          .call(xAxis_2);
+
+        // Set Y axis to scatter plot section
+        points_2.append("g")
+          .attr("class", "axis axis--y")
+          .call(yAxis_2);
+
+        // Set X axis to context section
+        context_2.append("g")
+          .attr("class", "axis axis--x")
+          .attr("transform", "translate(0," + HEIGHT2_2 + ")")
+          .call(xAxis2_2);
+
+        // Set brush call for context bar
+        context_2.append("g")
+          .attr("class", "brush_2")
+          .call(brush_2)
+          .call(brush_2.move, xScale_2.range());
+
+        // X Axis label
+        context_2.append("text")
+          .attr("transform", "translate(" + (WIDTH_2/2) + "," + (HEIGHT2_2 + 40) + ")")
+          .style("text-anchor", "middle")
+          .text("Happiness Score");
+
+        // Y Axis label
+        vis_2.append("text")
+          .attr("transform", "rotate(-90), translate(" + (-1 * HEIGHT_2 / 2 ) + ", 20)")
+          .style("text-anchor", "middle")
+          .text("Economy (births per woman)");     
+          });
+           </script>
+</body>
+</html>

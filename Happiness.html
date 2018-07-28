@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>World Happiness Analysis</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+    box-sizing: border-box;
+	
+}
+img {
+    opacity: 0.8;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+
+footer .pagination a {
+	border: 3px solid #ddd;
+	margin: 0 4px; 
+    color: black;
+    float: center;
+    padding: 8px 16px;
+    text-decoration: none;
+/*	background-color: #f1f1f1; This is to make the 1 2 3 as white background in pagination  */
+	display: inline-block;
+    transition: background-color .1s;
+}
+
+footer .pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+footer .pagination a:hover:not(.active) {background-color: #ddd; color: black;}
+
+ h1{font: darkgrey;
+    color: black;
+    text-align: center;
+   }
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Style the header */
+header {
+	float: top;
+    width: 100%;
+    height: 130px; 
+    background-color: #666;
+    padding: 10px;
+    text-align: center;
+    font-size: 20px;
+    color: white;
+	
+}
+
+/* Create two columns/boxes that floats next to each other */
+nav {
+    float: left;
+    width: 30%;
+    height: 700px; 
+    background: #ccc;
+    padding: 20px;
+}
+
+/* Style the list inside the menu */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+article {
+    position: relative;
+    float: left;
+	height: 700px;
+	width: 70%;
+    background-color: #f1f1f1;
+}
+
+article .top-left {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+	text-align: justify;
+	padding-right: 20px;
+	padding-left: 20px;
+}
+
+
+/* Clear floats after the columns */
+section:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Style the footer */
+footer {
+    background-color: #888;
+    padding: 15px;
+    text-align: center;
+    color: white;
+	 float: bottom;
+	height: 70px;
+	width: 100%;
+}
+
+/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+@media (max-width: 600px) {
+    nav, article {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.previous {
+    background-color: #f1f1f1;
+    color: white;
+}
+
+.next {
+	background-color: #f1f1f1;
+    color: white;
+}
+</style>
+</head>
+<body>
+<header>
+<h1>Analysis of Gun Violence in USA(2014 - 2017) </h1>
+</header>
+
+<section>
+  <nav>
+    <ul>
+	  <br></br> 
+	  <br></br> 
+	  <li><b> Discussed Visualization </b> </li><br>
+	  <li><a href="YearwiseIncidents.html">Yearwise Incidents</a></li><br>
+	  <li><a href="StatewiseIncidents.html">Statewise Incidents</a></li><br>
+      <li><a href="RateofIncidents.html">Rate of Incidents</a></li><br>
+      
+	  <br></br>
+	  <br></br>
+  	  <br></br>
+	  <br></br>
+  	  <br></br>
+	  <br></br>
+	  <br></br>
+
+	  <I>
+	  <b>References:</b> This project has been developed using D3 libraries, HTML, CSS and SVG and images. I have referred CS-498 course materials like videos, examples taught by Prof Hart's and online tutorials and videos to work on this project. Here are the few resources that played key role in my learning:
+	  
+		<li><a href="https://bl.ocks.org/mbostock/">Mike Bostock’s Blocks</a></li>
+		<li><a href="https://www.w3schools.com">W3 Schools</a></li>
+	   </I>	
+    </ul>
+  </nav>
+  
+  <article>
+      <img src="newgun.jpg" alt="gun" style="height:100%; width:100%;" "img">
+<div class="top-left">
+<p><b>About:</b> For this Gun Violence analysis project, I have used 2014 to 2017 calendar year U.S Gun Violence data set from Kaggle(<b><a href="https://www.kaggle.com/jameslko/gun-violence-data/data">Gun Violence data</a></b>) and 2014 to 2017 calendar year U.S population data set from Census(<b><a href=https://www2.census.gov/programs-surveys/popest/tables/2010-2017/state/totals/nst-est2017-01.xlsx>Population data</a></b>). Gun Violence analysis can be done on many factors, I have chosen the factors like Number of incidents, year and used US population data to show the rate of Gun Violence per 1000 population for the years 2014 - 2017. This project is based on hybrid interactive slide show. 
+
+Each slide has similar template, fonts, bar graphs, tooltip and Line charts to provide visual consistency on scene. Slides are in order to convey the message. For consistent <b>annotations</b>, each slide has details and trends analysis in similar format. X and Y Axis has been labeled clearly. 
+<br></br>
+Parameters and triggers has been used in all slides. The page headers will give user an information on what they are looking. Upon mouseover any bar it changes its color to Orangered and by the use of tooltip it displays the value. When user moveout their mouse, color turns back to Orange. Hyperlinks and pagination will let the user move to different slides. Also, at the bottom of the page solid color on the page bar will let user know which page they are in. All the slide has back to home link along with the links to navigate to other pages
+<br></br>
+
+The links for the graphs are given on the <b>left pane</b> to show Gun violence reported in different states across USA for the year 2014-2017. You can traverse to respective graphs to find overall incidents reported across USA between 2014 and 2017, then, which state has highest or lowest Gun Violence Incidents and which state has highest rate of Gun Violence per 1000 population which gives you an overview of which states are safe and which states are dangerous.
+<br>
+</p>
+</div>
+  </article>
+</section>
+
+<footer>
+  <div class="pagination">
+	<a href="#" class="previous">&laquo; Previous</a>
+	<a class="active" href="#">1</a>
+	<a href="YearwiseIncidents.html">2</a>
+	<a href="StatewiseIncidents.html">3</a>
+	<a href="RateofIncidents.html">4</a>
+	<a href="YearwiseIncidents.html" class="next">Next &raquo;</a> 
+
+</div>
+</footer>
+
+</body>
+</html>

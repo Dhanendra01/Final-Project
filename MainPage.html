@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+	<style>
+  img {
+    opacity: 0.7;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: -1;
+}
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+ h1{font: darkgrey;
+    color: black;
+    text-align: center;
+   }
+
+ p {color: black;
+ font-size: 19px;
+
+   }
+   
+ h3 {
+	color: black;
+	font-size: 19px;
+    }
+	
+div.gallery:hover {
+    border: 1px solid #777;
+}
+
+div.gallery img {
+    width: 100%;
+    height: auto;
+}
+
+div.desc {
+    padding: 15px;
+    text-align: center;
+}
+</style>
+  </head>
+
+  <body>
+    <h1>World Happiness report</h1>
+	<div class="gallery">
+  <a target="_blank" href="happy.jpg">
+    <img src="happy.jpg" alt="Hapiness" width="600" height="400">
+  </a>
+  </div>
+	
+
+<p><b>About the Visualization:</b>For this Visualization, I have used the world happiness report for the year 2016 from Kaggle. The data represents the happiness score estimate along with the extent to which factors like economic production, social support, life expectancy, freedom, absence of corruption, and generosity contribute to making life evaluations higher in each country than they are in Dystopia.
+
+This project is based on hybrid interactive slide show. Guidance is provided on each slide to the users that they can see details like annotations, tooltips, sort etc., that they might be interested on or they can choose just to continue. 
+<br></br>
+
+<b>Scenes:</b>Each scene is a single chart with a specific goal related to the same subject and in a specific order to best convey the message. Each slide has similar template, fonts, hue and tool tip to provide visual consistency on scene.
+<br></br>
+
+<b>Annotations:</b>Annotations are provided as required and are highlighted in blue color to show the details. The legend and labels along the X and Y axis provides additional annotations for the chart.
+<br></br>
+
+<b>Triggers:</b>The previous and next buttons, page numbers in the navigation bar of each page acts a triggers and sort checkbox on all bar charts also acts as one of the triggers. The mouse click acts as a trigger event for navigation. The mouse hover is another user interface event. The hover event triggers the display of tooltip in all the line and bar charts. 
+<br></br>
+
+<b>Parameters:</b>In bar graphs, check box entry acts as the parameter for the graph, user can sort and unsort the data. Slide numbers, current page highlighted also serve as parameters. Based on the user sort parameter selection, appropriate data is filtered and respective data is displayed. 
+
+<br></br>
+<u><b>Visualizations Discussed:</b></u>
+</p>
+
+<a href="https://aagrahar.github.io/MonthSell.html" style="font-size: 18px">World Happiness Overview</a><br/><br/>
+<a href="https://aagrahar.github.io/SellingPrice.html" style="font-size: 18px">Happiness as a factor of Economy </a><br></br>
+<a href="https://aagrahar.github.io/SoldByCity.html" style="font-size: 18px">Happiness Analysis</a>
+<br>
+    
+<p>
+<I><b>References:</b> This project has been developed using D3 libraries, HTML, CSS and SVG and google images. I have referred to Prof Hart's example and online tutorials and videos to work on this project. Here are the few resources that played key role in my learning: 
+<br><a href="http://www.tutorialsteacher.com/d3js"style="font-size: 12px">D3 Tutorials</a>
+<br><a href="https://bost.ocks.org/mike/bar/"style="font-size: 12px">Let's make a bar chart</a>
+<br><a href="https://www.w3schools.com"style="font-size: 12px">W3 Schools</a>
+<br><a href="https://bl.ocks.org/mbostock"style="font-size: 12px">Mike Bostock</a>
+</I>
+<!pagination example code from https://www.w3schools.com/howto/howto_css_pagination.asp>		
+<div class="pagination">
+  <a href="#">&laquo;</a>
+  <a class="active" href="#">1</a>
+  <a href="https://aagrahar.github.io/MonthSell.html">2</a>
+  <a href="https://aagrahar.github.io/SellingPrice.html">3</a>
+  <a href="https://aagrahar.github.io/SoldByCity.html">4</a>
+  <a href="https://aagrahar.github.io/MonthSell.html">&raquo;</a>
+</div>
+	</p>
+	
+  </body>
+
+</html>

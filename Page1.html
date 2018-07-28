@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>World Happiness Analysis</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+    box-sizing: border-box;
+  
+}
+img {
+    opacity: 0.6;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+        position: absolute;
+    left: 0px;
+    top: 0px;
+    z-index: -1;
+}
+
+footer .pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+
+footer .pagination a.active {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
+
+footer .pagination a:hover:not(.active) {background-color: #ddd; border-radius: 5px;}
+
+ h1{font: darkgrey;
+    color: black;
+    text-align: center;
+   }
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+  background-color: lightblue;
+}
+
+/* Style the header */
+header {
+  float: top;
+  width: 100%;
+    height: 80px; 
+    background-color: DodgerBlue;
+    padding: 5px;
+    text-align: center;
+    font-size: 15px;
+}
+
+/* Create two columns/boxes that floats next to each other */
+nav {
+    float: left;
+    width: 20%;
+    height: 850px; 
+    background: #ccc;
+  padding: 5px;
+  font-size: 15px;
+  }
+
+/* Style the list inside the menu */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+article {
+    position: relative;
+    float: left;
+  height: 850px;
+  width: 80%;
+    background-color: #f1f1f1;
+}
+
+article .top-left {
+    position: absolute;
+    top: 2%;
+    left: 47%;
+  font-size: 15px;
+  text-align: justify;
+  padding-right: 20px;
+  padding-left: 20px;
+}
+
+/* Clear floats after the columns */
+section:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Style the footer */
+footer {
+     background-color: #888;
+      padding: 15px;
+    text-align: left;
+    color: white;
+   float: bottom;
+  height: 70px;
+  width: 100%;
+}
+
+/* Responsive layout - makes the two columns/boxes stack on top of each other instead of next to each other, on small screens */
+@media (max-width: 600px) {
+    nav, article {
+        width: 100%;
+        height: auto;
+    }
+}
+
+.previous {
+    background-color: #f1f1f1;
+    color: white;
+}
+
+.next {
+  background-color: #f1f1f1;
+    color: white;
+}
+</style>
+</head>
+<body>
+<header>
+<h1>World Happiness Analysis </h1>
+</header>
+
+<section>
+  <nav>
+    <ul>
+    <br></br> 
+    <br></br> 
+    <li><b> Discussed Visualization </b> </li><br>
+    <li><a href="Overview.html">Yearwise - Gun Violence Incidents</a></li><br>
+    <li><a href="Happiness and Economy.html">Statewise - Gun Violence  Incidents</a></li><br>
+      <li><a href="Happiness and other parameters.html">Rate of Gun Violence Incidents</a></li><br>
+      
+    <br></br>
+    <br></br>
+      <br></br>
+    <br></br>
+      <br></br>
+    <br></br>
+    <br></br>
+    <br></br>
+   
+    <I>
+    <p style = "text-align: justify;"> 
+    <b>References:</b> This project has been developed using D3 libraries, HTML, CSS and SVG and images. I have referred CS-498 course materials like videos, examples taught by Prof Hart's and online tutorials and videos to work on this project. Here are the few resources that played key role in my learning:
+    </p>
+    <li><a href="https://bl.ocks.org/mbostock/">Mike Bostock’s Blocks</a></li>
+    <li><a href="https://www.w3schools.com">W3 Schools</a></li>
+     </I> 
+    </ul>
+  </nav>
+  
+  <article>
+      <img src="happy.jpg" alt="happiness" style="height:100%; width:100%;" "img">
+<div class="top-left">
+</div>
+  </article>
+</section>
+
+<footer>
+  <div class="pagination">
+  <a href="#" class="previous">&laquo; Previous</a>
+  <a class="active" href="#">1</a>
+  <a href="Overview.html">2</a>
+  <a href="StatewiseIncidents.html">3</a>
+  <a href="Happiness and Economy.html">4</a>
+  <a href="YearwiseIncidents.html" class="next">Next &raquo;</a> 
+
+</div>
+</footer>
+
+</body>
+</html>
+
+

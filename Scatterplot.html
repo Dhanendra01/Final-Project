@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+.pagination a {
+    color: black;
+    float: left;
+     font-size: 15px;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+}
+
+.pagination a.active {
+    background-color: #4CAF50;
+     font-size: 15px;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+
+p {color: black;
+  font-size: 15px;
+ text-align: justify;
+ padding-right: 120px;
+ padding-left: 100px;
+ width: 940px;
+   }
+
+body {
+  font: 10px sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    position: relative;
+  width: 960px;
+}
+
+.axis text {
+  font: 13px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.dot {
+  stroke: #000;
+}
+.tooltip {
+  position: absolute;
+  width: 300px;
+  height: 38px;
+  pointer-events: none;
+}
+
+header {
+  height: 60px; 
+    text-align: left;
+  font-size: 12px;
+    padding: 2px;
+}
+
+</style>
+<header>
+    <h1> Happiness as a factor of Economy </h1>
+</header>
+<body>
+<script src="https://d3js.org/d3.v3.min.js"></script>
+<script src="https://d3js.org/d3-selection-multi.v1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="https://d3-ring-note.js"></script>
+<script>
+
+
+var margin = {top: 20, right: 20, bottom: 50, left: 100},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // add the tooltip area to the webpage
+var tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+d3.csv("Data4.csv", function(error, data) {
+  if (error) throw error;
+
+  data.forEach(function(d) {
+    d.Score = +d.Score;
+    d.Economy = +d.Economy;
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.Economy; })).nice();
+  y.domain(d3.extent(data, function(d) { return d.Score; })).nice();
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("x", width)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .text("Economy rate");
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("class", "label")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Score")
+
+
+  svg.selectAll(".dot")
+      .data(data)
+    .enter().append("circle")
+      .attr("class", "dot")
+      .attr("r", 3.5)
+      .attr("cx", function(d) { return x(d.Economy); })
+      .attr("cy", function(d) { return y(d.Score); })
+      .style("fill", function(d) { return color(d.Region); })
+      .on("mouseover", function(d) {
+          tooltip.transition()
+               .duration(200)
+               .style("opacity", 4);
+          tooltip.html(d["Country"] + "<br/> (" + d.Score 
+          + ", " + d.Economy + ")")
+               .style("left", (d3.event.pageX + 5) + "px")
+               .style("top", (d3.event.pageY - 28) + "px");
+      })
+      .on("mouseout", function(d) {
+          tooltip.transition()
+               .duration(500)
+               .style("opacity", 0);
+      });
+
+  
+  var legend = svg.selectAll(".legend")
+      .data(color.domain())
+    .enter().append("g")
+      .attr("class", "legend")
+      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+
+  legend.append("rect")
+      .attr("x", width - 18)
+      .attr("width", 18)
+      .attr("height", 18)
+      .style("fill", color);
+
+  legend.append("text")
+      .attr("x", width - 24)
+      .attr("y", 9)
+      .attr("dy", ".35em")
+      .style("text-anchor", "end")
+      .text(function(d) { return d; });
+
+});
+
+</script>
+<p><b> Why Scatter Plot:</b><p>
+
+<p>
+I wanted to show the Happiness score of all the countries in the world without making the visualization too crowded. Along with the score wanted to display the impact of economy/finance on the happiness score for each of the countries. Considering all of these, I thought it will be apt to use scatter plot.
+</br>
+
+
+<p><b>Per country score and the impact of economy on the score:</b></p>
+<p>
+  The scatter plots on this page shows the happiness score for all the countries in the World along with the economy rate. If you hover over each plot, the tooltip will reveal the score which is based on a scale from 1 to 10 along with the extent to which the economy plays a role in the happiness. The economy rate scale ranges from 0 to 2. Denmark has the highest happiness score whereas Burundi has the lowest.
+  </p> 
+
+<p><b>Interesting observations:</b></p>
+<p>
+  Countries like Norway, Switzerland, Kuwait, UAE have more impact on happiness score because of the economy still they do not have the highest happiness score. This gives an idea that there are other parameters along with economy that influence the overall happiness score for a given country. Lets try to understand this in the next slide.
+  </p> 
+
+<!pagination example code from https://www.w3schools.com/howto/howto_css_pagination.asp>
+<footer>
+<div class="pagination">
+  <a href="https://aagrahar.github.io/MonthSell.html">&laquo;</a>
+  <a  href="https://aagrahar.github.io/About%20the%20Visualization.html">1</a>
+  <a href="https://aagrahar.github.io/MonthSell.html">2</a>
+  <a class="active" href="#">3</a>
+  <a href="https://aagrahar.github.io/SoldByCity.html">4</a>
+  <a href="https://aagrahar.github.io/SoldByCity.html">&raquo;</a>
+</div>
+</footer>
+</body>
+</head>
+</html>

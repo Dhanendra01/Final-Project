@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    transition: background-color .3s;
+}
+
+.pagination a.active {
+    background-color: #4CA120;
+    color: white;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;}
+	
+p {color: black;
+ font-size: 20px;
+   }
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: relative;
+  width: 960px;
+}
+.axis {
+	  font: 15px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+.bar {
+  fill: steelblue;
+  fill-opacity: .8;
+}
+.x.axis path {
+  display: none;
+}
+label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+rect:hover {
+				fill: orange;
+			}
+rect {
+   -moz-transition: all 0.3s;
+   -o-transition: all 0.3s;
+   -webkit-transition: all 0.3s;
+   transition: all 0.3s;
+}
+
+#tooltip {
+				position: absolute;
+				width: 200px;
+				height: auto;
+				padding: 12px;
+				background-color: white;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 10px;
+				-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+				-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+				box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+				pointer-events: none;
+			}
+			
+			#tooltip.hidden {
+				display: none;
+			}
+			
+			#tooltip p {
+				margin: 0;
+				font-family: sans-serif;
+				font-size: 16px;
+				line-height: 20px;
+			}
+
+	
+</style>
+ 
+<div id="tooltip" class="hidden">
+			<p><strong>Region</strong></p>
+			<p><span id="Score">100</span>%</p>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script>
+var margin = {top: 20, right: 20, bottom: 180, left: 100},
+    width = 960 - margin.left - margin.right,
+    height = 600 - margin.top - margin.bottom;
+var format = d3.format(".0");
+
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+
+var y = d3.scale.linear().range([height, 0]);
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");  
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickFormat(format);
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+d3.csv("Data2.csv", function(error, data) {
+  data.forEach(function(d) {
+    d.Score = +d.Score;
+  });
+  x.domain(data.map(function(d) { return d.Region; }));
+  y.domain([0, d3.max(data, function(d) { return d.Score; })]);
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .selectAll("text")  
+            .style("text-anchor", "end")
+            .attr("dx", "-.5em")
+            .attr("dy", "-.9em")
+            .attr("transform", function(d) {
+                return "rotate(-90)" 
+                });
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -70)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Score");
+  svg.selectAll(".bar")
+      .data(data)
+    .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", function(d) { return x(d.Region); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.Score); })
+      .attr("height", function(d) { return height - y(d.Score); })
+      .on("mouseover", function(d) {
+
+					//Get this bar's x/y values, then augment for the tooltip
+					var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 2;
+					var yPosition = parseFloat(d3.select(this).attr("y")) / 2 + h / 2;
+
+					//Update the tooltip position and value
+					d3.select("#tooltip")
+						.style("left", xPosition + "px")
+						.style("top", yPosition + "px")						
+						.select("#Score")
+						.text(d);
+			   
+					//Show the tooltip
+					d3.select("#tooltip").classed("hidden", false);
+
+			   })
+			   .on("mouseout", function() {
+			   
+					//Hide the tooltip
+					d3.select("#tooltip").classed("hidden", true);
+					
+			  
+			   })
+			   .append("title")
+   .text(function(d) {
+         return "# Score "+d.Score;
+         });
+  //d3.select("input").on("change", change);
+ // var sortTimeout = setTimeout(function() {
+   // d3.select("input").property("checked", true).each(change);
+  //}, 2000);
+  function change() {
+    //clearTimeout(sortTimeout);
+    // Copy-on-write since tweens are evaluated after a delay.
+    var x0 = x.domain(data.sort(this.checked
+        ? function(a, b) { return b.Score - a.Score; }
+        : function(a, b) { return d3.ascending(a.Region, b.Region); })
+        .map(function(d) { return d.Region; }))
+        .copy();
+    svg.selectAll(".bar")
+        .sort(function(a, b) { return x0(a.Region) - x0(b.Region); });
+    var transition = svg.transition().duration(750),
+        delay = function(d, i) { return i * 50; };
+    transition.selectAll(".bar")
+        .delay(delay)
+        .attr("x", function(d) { return x0(d.Region); });
+    transition.select(".x.axis")
+        .call(xAxis)
+      .selectAll("g")
+        .delay(delay)
+        .selectAll("text")  
+            .style("text-anchor", "end")
+            .attr("dx", "-.5em")
+            .attr("dy", "-.9em")
+            .attr("transform", function(d) {
+                return "rotate(-90)" 
+                });
+  }
+});
+</script>
+<p>This bar chart demonstrates total number of houese sold per month in 2016 for 8 popular cities in east bay. As you can see from the chart that maximum number of houses was sold in the month of June. Market was at its peak during spring and summer and lowest during winter. So, season does play an important role in the real estate market.
+<br></br>
+During peak season inventory is higher and it gives better opportunity to a buyer to find the right home. Peak season is favorable for sellers as well, due to shorter marketing time and a higher likelihood of finding a good buyer.
+  </p> 
+<br>
+<a href="https://aagrahar.github.io/SellingPrice.html">Median selling price in each city </a><br></br>
+<a href="https://aagrahar.github.io/SoldByCity.html">Number of houses sold in each city</a><br/><br/>
+<a href="https://aagrahar.github.io/About%20the%20Visualization.html">Back to Home Page</a><br/><br/>
+
+<!pagination example code from https://www.w3schools.com/howto/howto_css_pagination.asp>
+<div class="pagination">
+  <a href="https://aagrahar.github.io/About%20the%20Visualization.html">&laquo;</a>
+  <a href="https://aagrahar.github.io/About%20the%20Visualization.html">1</a>
+  <a class="active" href="#">2</a>
+  <a href="https://aagrahar.github.io/SellingPrice.html">3</a>
+  <a href="https://aagrahar.github.io/SoldByCity.html">4</a>
+  <a href="https://aagrahar.github.io/SellingPrice.html">&raquo;</a>
+</div>
+</body>
